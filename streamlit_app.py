@@ -100,14 +100,11 @@ if st.button("Extract PDFs"):
             file_name = st.session_state.extracted_text_from_invoice[i][0]
             pdf_content = st.session_state.extracted_text_from_invoice[i][1]
             
-            
-            
-            
             gpt_prompt = ("""I send you an extract of a pdf bill invoice in """ + languages + """. Your job is to find several data from the invoice: """ 
-                        + pdf_content +  """. Output the following in order:\n"""
+                        + pdf_content + 
+                        """. Output the following in order:\n"""
                         + output_string +
-                        """\n
-                        Output these values as list of strings and integers separated by ; and nothing else!""")
+                        """\nOutput these values as list of strings and integers separated by ; and nothing else!""")
             
             try:    
                 client = OpenAI(api_key=openai.api_key)
@@ -123,8 +120,8 @@ if st.button("Extract PDFs"):
                 
                 extracted_text = response.choices[0].message.content.strip()
                 
-                if len(extracted_text.split(";")) != 6:
-                    st.error(f"GPT-4 extraction failed for {file_name}: {e}")
+                if len(extracted_text.split(";")) != len(list_of_info):
+                    st.error(f"GPT-4 extraction failed for {file_name}")
                     continue        
                 st.session_state.extracted_data.append([file_name] + extracted_text.split(";"))
                 st.session_state.number_of_tokens += count_tokens(gpt_prompt)
@@ -136,9 +133,7 @@ if st.button("Extract PDFs"):
             st.write(file_name + " is being extracted.")
 
     if len(st.session_state.extracted_data) != 0:
-        st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=["Fájlnév", "Partner Név", "Számlaszám", "Számla Kelte", "Bruttó ár", "Nettó ár", "ÁFA"])
-        st.session_state.df_extracted["Számlaszám"] = st.session_state.df_extracted["Számlaszám"].astype(str)
-        st.session_state.df_extracted["1"] = np.nan
+        st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=list_of_info)
 
 if len(st.session_state.df_extracted) > 0:        
     st.write("✅ **Extraction complete!** Here are the results:")
