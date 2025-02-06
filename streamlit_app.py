@@ -47,7 +47,7 @@ if len(languages) > 0:
 st.write("3) Enter the informations you want to extract from the documents, separated by commas.\nExample: Invoice number, Net amount, VAT")
 extract_information = st.text_input(label="Enter the information to extract", placeholder="Type here...")
 if len(extract_information) > 0: 
-    list_of_info = [x.strip() for x in "Invoice number, Net amount, VAT".split(',')]
+    list_of_info = [x.strip() for x in extract_information.split(',')]
     output_string = '\n'.join(f"{i+1}) {item}" for i, item in enumerate(list_of_info))
 
     st.write("✅ Information set to: \n\n" + output_string)
