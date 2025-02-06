@@ -1,1 +1,1 @@
-# general_pdf_extractor
+# pdf_extractor
