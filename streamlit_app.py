@@ -135,7 +135,7 @@ if st.button("Extract PDFs"):
             st.write(file_name + " is being extracted.")
 
     if len(st.session_state.extracted_data) != 0:
-        st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=list_of_info)
+        st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=['filename'] + list_of_info)
 
 if len(st.session_state.df_extracted) > 0:        
     st.write("✅ **Extraction complete!** Here are the results:")
