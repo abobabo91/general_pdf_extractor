@@ -32,7 +32,7 @@ openai.api_key = st.secrets['openai']["OPENAI_API_KEY"]
 
 
 
-st.title("📄 Invoice Data Extractor")
+st.title("📄 PDF Data Extractor")
 
 st.write("1) Upload one or more **Documents (PDFs)** to extract relevant information.")
 uploaded_files = st.file_uploader("Upload PDFs", type=["pdf"], accept_multiple_files=True)
