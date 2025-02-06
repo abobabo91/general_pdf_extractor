@@ -120,6 +120,8 @@ if st.button("Extract PDFs"):
                 
                 extracted_text = response.choices[0].message.content.strip()
                 
+                st.write(extracted_text)
+                
                 if len(extracted_text.split(";")) != len(list_of_info):
                     st.error(f"GPT-4 extraction failed for {file_name}")
                     continue        
