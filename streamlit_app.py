@@ -45,7 +45,7 @@ extract_information = st.text_input(label="Enter the information to extract", pl
 
 
 
-#1) text extraction from pdf
+st.write("4) Extract the required information from the PDFs.")
 if st.button("Extract PDFs"):  
     st.session_state.extracted_text_from_invoice = []      
     if uploaded_files:
