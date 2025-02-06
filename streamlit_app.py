@@ -39,9 +39,13 @@ uploaded_files = st.file_uploader("Upload PDFs", type=["pdf"], accept_multiple_f
 
 st.write("2) Enter the language(s) of the documents.")
 languages = st.text_input(label="Enter the languages", placeholder="Type here...")
-
+if len(languages) > 0: 
+    st.write("✅ Language set.")
+    
 st.write("3) Enter the informations you want to extract from the documents, separated by commas. Eg: Invoice number, Net amount, VAT")
 extract_information = st.text_input(label="Enter the information to extract", placeholder="Type here...")
+if len(extract_information) > 0: 
+    st.write("✅ Information set.")
 
 
 
