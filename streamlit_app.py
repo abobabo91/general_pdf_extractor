@@ -38,10 +38,10 @@ st.write("1) Upload one or more **Documents (PDFs)** to extract relevant informa
 uploaded_files = st.file_uploader("Upload PDFs", type=["pdf"], accept_multiple_files=True)
 
 st.write("2) Enter the language(s) of the documents.")
-languages = st.text_input(placeholder="Type here...")
+languages = st.text_input(label="Enter the languages", placeholder="Type here...")
 
 st.write("3) Enter the informations you want to extract from the documents, separated by commas. Eg: Invoice number, Net amount, VAT")
-extract_information = st.text_input(placeholder="Type here...")
+extract_information = st.text_input(label="Enter the information to extract", placeholder="Type here...")
 
 
 
