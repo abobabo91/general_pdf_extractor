@@ -36,16 +36,21 @@ st.title("📄 Invoice Data Extractor")
 
 st.write("1) Upload one or more **Documents (PDFs)** to extract relevant information.")
 uploaded_files = st.file_uploader("Upload PDFs", type=["pdf"], accept_multiple_files=True)
+if len(uploaded_files) > 0: 
+    st.write("✅ Successfully uploaded " + str(len(uploaded_files)) + " PDF files.")
 
 st.write("2) Enter the language(s) of the documents.")
 languages = st.text_input(label="Enter the languages", placeholder="Type here...")
-if len(languages) > 0: 
+if len(languages) > 0:
     st.write("✅ Language set to: " + languages)
     
-st.write("3) Enter the informations you want to extract from the documents, separated by commas. Eg: Invoice number, Net amount, VAT")
+st.write("3) Enter the informations you want to extract from the documents, separated by commas.\nExample: Invoice number, Net amount, VAT")
 extract_information = st.text_input(label="Enter the information to extract", placeholder="Type here...")
 if len(extract_information) > 0: 
-    st.write("✅ Information set to: " + extract_information)
+    list_of_info = [x.strip() for x in "Invoice number, Net amount, VAT".split(',')]
+    output_string = '\n'.join(f"{i+1}) {item}" for i, item in enumerate(list_of_info))
+
+    st.write("✅ Information set to: \n\n" + output_string)
 
 
 
@@ -95,15 +100,14 @@ if st.button("Extract PDFs"):
             file_name = st.session_state.extracted_text_from_invoice[i][0]
             pdf_content = st.session_state.extracted_text_from_invoice[i][1]
             
-            gpt_prompt = ("""I send you an extract of a pdf bill invoice in hungarian. Your job is to find the final several data from the invoice: """ 
-                        + pdf_content +  """. Output the following in order: 
-                        1) the name of the partner, 
-                        2) the invoice number, 
-                        3) the date of the invoice,
-                        4) the total gross amount of the full invoice, 
-                        5) the total net amount of the invoice, 
-                        6) the total VAT (ÁFA in hungarian) of the invoice. 
-                        Output these values (1, 2 and 3 as strings, 4, 5 and 6 as integers) separated by ; and nothing else!""")
+            
+            
+            
+            gpt_prompt = ("""I send you an extract of a pdf bill invoice in """ + languages + """. Your job is to find several data from the invoice: """ 
+                        + pdf_content +  """. Output the following in order:\n"""
+                        + output_string +
+                        """\n
+                        Output these values as list of strings and integers separated by ; and nothing else!""")
             
             try:    
                 client = OpenAI(api_key=openai.api_key)
