@@ -119,9 +119,7 @@ if st.button("Extract PDFs"):
                     timeout=30)
                 
                 extracted_text = response.choices[0].message.content.strip()
-                
-                st.write(extracted_text)
-                
+                                
                 if len(extracted_text.split(";")) != len(list_of_info):
                     st.error(f"GPT-4 extraction failed for {file_name}")
                     continue        
@@ -135,7 +133,7 @@ if st.button("Extract PDFs"):
             st.write(file_name + " is being extracted.")
 
     if len(st.session_state.extracted_data) != 0:
-        st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=['filename'] + list_of_info)
+        st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=['Filename'] + list_of_info)
 
 if len(st.session_state.df_extracted) > 0:        
     st.write("✅ **Extraction complete!** Here are the results:")
