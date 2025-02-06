@@ -104,7 +104,7 @@ if st.button("Extract PDFs"):
                         + pdf_content + 
                         """. Output the following in order:\n"""
                         + output_string +
-                        """\nOutput these values as list of strings and integers separated by ; and nothing else!""")
+                        """\nOutput these values as list (strings, floats and integers) separated by ; and nothing else!""")
             
             try:    
                 client = OpenAI(api_key=openai.api_key)
