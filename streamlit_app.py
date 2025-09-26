@@ -262,19 +262,22 @@ if st.button("🚀 Start extraction"):
         st.warning("⚠️ Please specify at least one field to extract.")
     else:
         fields = [f.strip() for f in st.session_state.custom_fields if f.strip()]
-        # Build and show the deterministic prompt
+
+        # Build the deterministic prompt (used internally only)
         st.session_state.final_prompt = build_extraction_prompt(fields)
 
         if not st.session_state.final_prompt:
             st.error("Could not build the extraction prompt. Please add at least one non-empty field.")
         else:
-            st.text_area("Generated Extraction Prompt (read-only)", st.session_state.final_prompt, height=300)
-            st.code(
-                st.session_state.final_prompt + "\n\n<<<DOCUMENT TEXT START>>>\n[DOCUMENT TEXT HERE]\n<<<DOCUMENT TEXT END>>>",
-                language="markdown"
-            )
+            # (Optional) Developer-only debug toggle. Keep commented out if you never want it visible.
+            # debug_show = st.checkbox("Show generated prompt (dev only)", value=False)
+            # if debug_show:
+            #     st.code(
+            #         st.session_state.final_prompt + "\n\n<<<DOCUMENT TEXT START>>>\n[DOCUMENT TEXT HERE]\n<<<DOCUMENT TEXT END>>>",
+            #         language="markdown"
+            #     )
 
-            # Extraction loop
+            # Extraction loop (no prompt shown to the user)
             st.session_state.extracted_data = []
             progress = st.progress(0, text="Starting extraction...")
 
@@ -290,7 +293,6 @@ if st.button("🚀 Start extraction"):
 
             progress.empty()
 
-            # Show results
             if st.session_state.extracted_data:
                 columns = ["File name"] + fields
                 st.session_state.df_extracted = pd.DataFrame(st.session_state.extracted_data, columns=columns)
