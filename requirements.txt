@@ -8,3 +8,4 @@ openai
 openpyxl
 xlsxwriter
 tiktoken
+xlrd
