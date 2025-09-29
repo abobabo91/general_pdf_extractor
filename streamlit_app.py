@@ -8,9 +8,10 @@ from io import BytesIO
 from PIL import Image, ImageSequence
 from openai import OpenAI
 import traceback, sys, re, gc
-import docx
+from docx import Document
 from bs4 import BeautifulSoup
-import json
+import json  # this one stays, but no pip install needed
+
 
 # ---------------------------
 # Global exception handler
@@ -136,7 +137,7 @@ def extract_text_from_upload(uploaded_file):
     # --- DOCX branch ---
     elif file_name.endswith(".docx") or "word" in content_type:
         try:
-            doc = docx.Document(uploaded_file)
+            doc = Document(uploaded_file)
             text = "\n".join([p.text for p in doc.paragraphs])
             return text[:300000] if len(text) > 300000 else text
         except Exception as e:
