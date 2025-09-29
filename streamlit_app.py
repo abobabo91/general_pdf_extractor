@@ -8,6 +8,9 @@ from io import BytesIO
 from PIL import Image, ImageSequence
 from openai import OpenAI
 import traceback, sys, re, gc
+import docx
+from bs4 import BeautifulSoup
+import json
 
 # ---------------------------
 # Global exception handler
@@ -38,6 +41,7 @@ OPENAI_MODEL = "gpt-4o"  # do not change
 # ---------------------------
 # Text extraction (PDFs + Images)
 # ---------------------------
+
 def extract_text_from_upload(uploaded_file):
     """
     Extracts text from a single uploaded file.
@@ -114,6 +118,49 @@ def extract_text_from_upload(uploaded_file):
             st.warning(f"{uploaded_file.name} is very long; only the first 300,000 characters will be processed.")
             text = text[:300000]
         return text
+
+    else:
+        st.warning(f"Unsupported file type: {uploaded_file.name}")
+        return None
+    
+    # --- HTML branch ---
+    elif file_name.endswith(".html") or "html" in content_type:
+        try:
+            soup = BeautifulSoup(uploaded_file.read(), "html.parser")
+            text = soup.get_text(separator="\n")
+            return text[:300000] if len(text) > 300000 else text
+        except Exception as e:
+            st.error(f"Error reading HTML {uploaded_file.name}: {e}")
+            return None
+
+    # --- DOCX branch ---
+    elif file_name.endswith(".docx") or "word" in content_type:
+        try:
+            doc = docx.Document(uploaded_file)
+            text = "\n".join([p.text for p in doc.paragraphs])
+            return text[:300000] if len(text) > 300000 else text
+        except Exception as e:
+            st.error(f"Error reading DOCX {uploaded_file.name}: {e}")
+            return None
+
+    # --- TXT branch ---
+    elif file_name.endswith(".txt") or "text" in content_type:
+        try:
+            text = uploaded_file.read().decode("utf-8", errors="ignore")
+            return text[:300000] if len(text) > 300000 else text
+        except Exception as e:
+            st.error(f"Error reading TXT {uploaded_file.name}: {e}")
+            return None
+
+    # --- JSON branch ---
+    elif file_name.endswith(".json") or "json" in content_type:
+        try:
+            data = json.load(uploaded_file)
+            text = json.dumps(data, indent=2, ensure_ascii=False)
+            return text[:300000] if len(text) > 300000 else text
+        except Exception as e:
+            st.error(f"Error reading JSON {uploaded_file.name}: {e}")
+            return None
 
     else:
         st.warning(f"Unsupported file type: {uploaded_file.name}")

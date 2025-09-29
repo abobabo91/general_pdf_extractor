@@ -9,3 +9,6 @@ openpyxl
 xlsxwriter
 tiktoken
 xlrd
+docx
+bs4
+json
