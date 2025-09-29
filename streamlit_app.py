@@ -120,9 +120,6 @@ def extract_text_from_upload(uploaded_file):
             text = text[:300000]
         return text
 
-    else:
-        st.warning(f"Unsupported file type: {uploaded_file.name}")
-        return None
     
     # --- HTML branch ---
     elif file_name.endswith(".html") or "html" in content_type:
