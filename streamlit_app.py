@@ -293,21 +293,23 @@ uploaded_files = st.file_uploader(
 
 st.subheader("📝 What information do you want to extract?")
 
-# Dynamic input fields
-for i, val in enumerate(st.session_state.custom_fields):
-    st.session_state.custom_fields[i] = st.text_input(f"Field {i+1}", val)
+# Single text area for comma-separated fields
+st.session_state.fields_input = st.text_area(
+    "Enter fields separated by commas",
+    st.session_state.get("fields_input", ""),
+    placeholder="e.g. Invoice number, Invoice date, Total, Authenticity (1–10)"
+)
 
-if st.button("➕ Add another field"):
-    st.session_state.custom_fields.append("")
 
 # --- Run Extraction ---
 if st.button("🚀 Start extraction"):
     if not uploaded_files:
         st.warning("⚠️ Please upload at least one document.")
-    elif not any(f.strip() for f in st.session_state.custom_fields):
-        st.warning("⚠️ Please specify at least one field to extract.")
+    elif not st.session_state.fields_input.strip():
+        st.warning("⚠️ Please enter at least one field.")
     else:
-        fields = [f.strip() for f in st.session_state.custom_fields if f.strip()]
+        fields = [f.strip() for f in st.session_state.fields_input.split(",") if f.strip()]
+
 
         # Build the deterministic prompt (used internally only)
         st.session_state.final_prompt = build_extraction_prompt(fields)
