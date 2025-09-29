@@ -285,10 +285,11 @@ Pro tip: You can ask **evaluative** things too, not just facts.
 
 st.subheader("📂 Upload your files")
 uploaded_files = st.file_uploader(
-    "Drop your PDFs or images here",
-    type=["pdf", "jpg", "jpeg", "png", "tif", "tiff", "bmp"],
+    "Drop your PDFs, images, or other documents here (PDF, DOCX, HTML, TXT, JSON, images…)",
+    type=["pdf", "jpg", "jpeg", "png", "tif", "tiff", "bmp", "html", "docx", "txt", "json"],
     accept_multiple_files=True
 )
+
 
 st.subheader("📝 What information do you want to extract?")
 
